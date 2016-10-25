@@ -54,7 +54,6 @@ sqlplus / as sysdba <<EOF
         whenever sqlerror exit 1
         alter pluggable database $PDBNAME open instances=all;
         alter pluggable database $PDBNAME save state instances=all;
-
         select con_id, name, inst_id, open_mode from gv$pdbs order by 1,2,3;
 EOF
 
@@ -67,7 +66,7 @@ fi
 echo "INFO - Listing DB configuration using srvctl config database -d $DBNAME_UNIQUE"
 srvctl config database -d $DBNAME_UNIQUE
 
-if [$ARCHIVELOGMODE="YES"]
+if [ $ARCHIVELOGMODE = "YES" ]
 echo "INFO - Setting archivelog mode"
 
 sqlplus / as sysdba <<EOF
@@ -126,7 +125,6 @@ create profile c##internal_user_profile limit
         PASSWORD_LOCK_TIME .0209
         PASSWORD_GRACE_TIME 7
         password_verify_function ORA12C_STRONG_VERIFY_FUNCTION;
-
 -- generic app user profile will have unlimited life time so that apps do not go down due to password expiry
 create profile c##generic_user_profile limit
   PASSWORD_LIFE_TIME UNLIMITED
@@ -135,7 +133,6 @@ create profile c##generic_user_profile limit
   PASSWORD_LOCK_TIME .0209
   PASSWORD_GRACE_TIME unlimited
   password_verify_function ORA12C_STRONG_VERIFY_FUNCTION;
-
 -- named user profile will have more strict limits - like 90 day password expiry, reuse, failed attempts etc
 create profile c##named_user_profile limit
   PASSWORD_LIFE_TIME 90
@@ -163,7 +160,6 @@ create profile c##dbsnmp_profile limit
         COMPOSITE_LIMIT UNLIMITED
         IDLE_TIME UNLIMITED
         CONNECT_TIME UNLIMITED;
-
 --
 --  SET THE RIGHT PROFILE FOR INTERNAL USERS
 --
